@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+    
+  <style>
+    h2 {
+      text-align: center;
+      font-size: 25px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    h3 {
+      text-align: center;
+      font-size: 16px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    h4 {
+      text-align: center;
+      font-size: 12px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+  </style>
+
+    <script type="text/javascript">
+      function draw(data) {
+      
+      /*
+        D3.js setup code
+      */
+
+          "use strict";
+          var margin = 75,
+              width = 1400 - margin,
+              height = 600 - margin;
+
+          d3.select('body')
+            .append('h2')
+            .text("3rd Class Passengers on the Titantic had the Lowest Rate of Survival");
+
+          d3.select('body')
+            .append('h3')
+            .text("Both Adults and Children in the 3rd Class Perished in the Greatest Numbers");
+
+          d3.select('body')
+            .append('h4')
+            .text("Note: Hover mouse over each bar on the chart for exact passenger counts and survival rate");
+
+          var svg = d3.select("body")
+            .append("svg")
+              .attr("width", width + margin)
+              .attr("height", height + margin)
+            .append('g')
+                .attr('class','chart');
+
+      /*
+        Dimple.js Chart construction code
+      */
+
+          var myChart = new dimple.chart(svg, data);
+
+          var x = myChart.addCategoryAxis("x", "Passenger Class & Age Group"); 
+          x.addOrderRule(["1st Class - Adult", "2nd Class - Adult", "3rd Class - Adult", "1st Class - Child", "2nd Class - Child", "3rd Class - Child"]);
+
+          var y = myChart.addMeasureAxis("y", "Number of Passengers");
+
+          var s = myChart.addSeries(["Survival Rate", "Status"], dimple.plot.bar);
+          s.addOrderRule("Status");
+
+          myChart.assignColor("Survived", "powderblue", 1.0);
+          myChart.assignColor("Deceased", "peachpuff", 1.0);
+          myChart.addLegend(150, 10, 280, 20, "left");
+          myChart.draw();
+        };
+      </script>
+  </head>
+<body>
+  <script type="text/javascript">
+  /*
+    Use D3 (not dimple.js) to load the TSV file
+    and pass the contents of it to the draw function
+    */
+  d3.csv("titanic_data_final.csv", draw);
+  </script>
+</body>
+</html>
